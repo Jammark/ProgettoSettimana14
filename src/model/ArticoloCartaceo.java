@@ -3,7 +3,12 @@ package model;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class ArticoloCartaceo {
+
+	private static final Logger log = LoggerFactory.getLogger(ArticoloCartaceo.class);
 
 	private String titolo, codiceISBN;
 	private int numeroPagine;
@@ -64,6 +69,7 @@ public abstract class ArticoloCartaceo {
 
 	public static ArticoloCartaceo fromString(String val) {
 		String[] array = val.split("@");
+		try {
 		String className = array[0];
 		array = Arrays.copyOfRange(array, 1, array.length);
 		if (className.equals(Rivista.class.getName())) {
@@ -73,5 +79,9 @@ public abstract class ArticoloCartaceo {
 		}else {
 			return null;
 		}
+	} catch (ArrayIndexOutOfBoundsException e) {
+		log.error(e.getMessage());
+		return null;
+	}
 	}
 }
